@@ -1,0 +1,1585 @@
+/* ==========================================================================
+   NEPAL PATRO & KATHMANDU DIGITAL CLOCK - MODERN DESIGN SYSTEM
+   ========================================================================== */
+
+:root {
+  /* Color Tokens - Modern Dark Palette */
+  --bg-primary: #0a0d14;
+  --bg-secondary: #111726;
+  --bg-card: rgba(19, 26, 42, 0.75);
+  --bg-card-hover: rgba(27, 38, 62, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.03);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-glass-hover: rgba(255, 255, 255, 0.16);
+  
+  /* Text Colors */
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  /* Brand & Accent Colors */
+  --accent-gold: #f59e0b;
+  --accent-gold-glow: rgba(245, 158, 11, 0.35);
+  --accent-amber: #d97706;
+  --accent-red: #ef4444; /* Saturday & Holidays */
+  --accent-red-glow: rgba(239, 68, 68, 0.3);
+  --accent-cyan: #06b6d4;
+  --accent-cyan-glow: rgba(6, 182, 212, 0.35);
+  --accent-emerald: #10b981;
+  --accent-purple: #8b5cf6;
+  
+  /* Clock Glows */
+  --clock-digit-color: #38bdf8;
+  --clock-glow: 0 0 25px rgba(56, 189, 248, 0.4), 0 0 50px rgba(6, 182, 212, 0.2);
+  --clock-border: rgba(56, 189, 248, 0.2);
+
+  /* Fonts */
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-nepali: 'Mukta', 'Noto Sans Devanagari', sans-serif;
+  --font-clock: 'Orbitron', 'JetBrains Mono', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Radii & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+  --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --bg-glass: rgba(0, 0, 0, 0.02);
+  --border-glass: rgba(0, 0, 0, 0.08);
+  --border-glass-hover: rgba(0, 0, 0, 0.15);
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #94a3b8;
+  --clock-digit-color: #0284c7;
+  --clock-glow: 0 4px 20px rgba(2, 132, 199, 0.2);
+  --clock-border: rgba(2, 132, 199, 0.25);
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+/* Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(245, 158, 11, 0.05) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Top Navigation Bar */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(10, 13, 20, 0.75);
+  border-bottom: 1px solid var(--border-glass);
+  padding: 0.75rem 1.5rem;
+}
+
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+
+.nav-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #f59e0b, #dc2626);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.35);
+  color: white;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.brand-title .devanagari {
+  font-family: var(--font-nepali);
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.brand-subtitle {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.live-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+  animation: pulse-live 2s infinite;
+}
+
+@keyframes pulse-live {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Reusable Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-card);
+  color: var(--text-main);
+  transition: var(--transition-smooth);
+  user-select: none;
+}
+
+.btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glass-hover);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7, #06b6d4);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0369a1, #0891b2);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.45);
+}
+
+.btn-fullscreen {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #0f172a;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+  padding: 0.5rem 1.1rem;
+}
+
+.btn-fullscreen:hover {
+  background: linear-gradient(135deg, #b45309, #d97706);
+  color: white;
+  box-shadow: 0 6px 22px rgba(245, 158, 11, 0.5);
+}
+
+.kbd-badge {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  font-family: var(--font-mono);
+}
+
+/* Main Container Layout */
+.app-main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Hero Section: Clock on Left, Calendar on Right */
+.hero-split-grid {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .hero-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Column: Clock & Kathmandu Observational Cards */
+.clock-observatory-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Glass Card Component */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card:hover {
+  border-color: var(--border-glass-hover);
+}
+
+/* Main Digital Clock Card */
+.digital-clock-card {
+  background: linear-gradient(145deg, rgba(22, 31, 52, 0.85), rgba(12, 18, 30, 0.85));
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  position: relative;
+}
+
+.clock-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.tz-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--clock-digit-color);
+}
+
+.clock-mode-toggles {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pill-toggle-btn {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.pill-toggle-btn.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--clock-digit-color);
+  color: var(--clock-digit-color);
+}
+
+/* Digital Digits Display */
+.digits-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1.25rem 0.5rem;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.digit-block {
+  font-family: var(--font-clock);
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--clock-digit-color);
+  text-shadow: var(--clock-glow);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.colon-separator {
+  font-family: var(--font-clock);
+  font-size: 2.8rem;
+  font-weight: 400;
+  color: var(--clock-digit-color);
+  opacity: 0.8;
+  animation: colon-blink 1s steps(1) infinite;
+  margin: 0 0.1rem;
+}
+
+@keyframes colon-blink {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.2; }
+}
+
+.seconds-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 0.3rem;
+}
+
+.digit-seconds {
+  font-family: var(--font-clock);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.digit-ampm {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-top: 0.25rem;
+}
+
+/* Second Progress Bar */
+.second-progress-bar-container {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.second-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--clock-digit-color), var(--accent-gold));
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--clock-digit-color);
+}
+
+/* Dual Dates Display */
+.dates-display-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.9rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+}
+
+.nepali-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.nepali-date-text {
+  font-family: var(--font-nepali);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  letter-spacing: 0.01em;
+}
+
+.nepali-tithi-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--accent-gold);
+  font-size: 0.75rem;
+  font-family: var(--font-nepali);
+  font-weight: 600;
+}
+
+.gregorian-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.gregorian-date-text {
+  font-weight: 500;
+}
+
+.nakshatra-text {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-family: var(--font-nepali);
+}
+
+/* Kathmandu Astronomy & Solar Card */
+.solar-card {
+  padding: 1.25rem;
+}
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-main);
+}
+
+.badge-tag {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-muted);
+}
+
+/* Sun Arc Visual */
+.sun-arc-wrapper {
+  position: relative;
+  margin: 1rem 0 1.25rem;
+  padding-bottom: 0.5rem;
+}
+
+.sun-arc-svg {
+  width: 100%;
+  height: 90px;
+  overflow: visible;
+}
+
+.sun-arc-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.sun-stat-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-glass);
+}
+
+.sun-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.sun-stat-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+}
+
+/* Moon Phase Widget */
+.moon-phase-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+.moon-visual-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #e2e8f0 0%, #64748b 70%, #1e293b 100%);
+  box-shadow: 0 0 15px rgba(226, 232, 240, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.moon-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.moon-phase-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.moon-phase-nepali {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  font-family: var(--font-nepali);
+}
+
+.moon-illumination {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* World Clock Mini Cards */
+.world-clocks-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.world-clock-mini-card {
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: var(--transition-smooth);
+}
+
+.world-clock-mini-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-glass-hover);
+}
+
+.wc-city-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.wc-time-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.wc-digits {
+  font-family: var(--font-clock);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.wc-diff {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: MERO PATRO MONTHLY CALENDAR
+   ========================================================================== */
+
+.calendar-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.patro-calendar-card {
+  padding: 1.5rem;
+  background: var(--bg-card);
+}
+
+/* Calendar Header Controls */
+.calendar-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.month-year-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bs-month-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.bs-month-title .nepali-text {
+  font-family: var(--font-nepali);
+  color: var(--accent-gold);
+}
+
+.gregorian-range-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.season-badge {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--accent-emerald);
+  font-family: var(--font-nepali);
+}
+
+/* Calendar Nav Actions */
+.cal-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.select-dropdown {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.select-dropdown:hover, .select-dropdown:focus {
+  border-color: var(--border-glass-hover);
+  background: var(--bg-card-hover);
+}
+
+/* Calendar Days Grid */
+.calendar-grid-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.calendar-weekdays-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+  margin-bottom: 0.35rem;
+}
+
+.weekday-header-cell {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0.5rem 0.25rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.weekday-header-cell.saturday {
+  color: var(--accent-red);
+}
+
+/* Days Matrix */
+.calendar-days-matrix {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.calendar-day-cell {
+  min-height: 86px;
+  padding: 0.55rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  transition: var(--transition-smooth);
+  user-select: none;
+}
+
+.calendar-day-cell:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.calendar-day-cell.other-month {
+  opacity: 0.32;
+}
+
+.calendar-day-cell.saturday {
+  background: rgba(239, 68, 68, 0.04);
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.calendar-day-cell.saturday .bs-day-number {
+  color: var(--accent-red);
+}
+
+.calendar-day-cell.holiday {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.calendar-day-cell.holiday .bs-day-number {
+  color: var(--accent-red);
+}
+
+/* Today highlight */
+.calendar-day-cell.today {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(245, 158, 11, 0.15));
+  border: 2px solid var(--accent-gold);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.3);
+}
+
+.calendar-day-cell.today .bs-day-number {
+  color: var(--accent-gold);
+  font-weight: 800;
+}
+
+.today-chip {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.62rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: var(--accent-gold);
+  color: #0f172a;
+  font-weight: 700;
+  font-family: var(--font-nepali);
+}
+
+/* Cell Contents */
+.cell-top-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.bs-day-number {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-main);
+}
+
+.ad-day-number {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+.cell-bottom-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-top: 0.25rem;
+}
+
+.cell-tithi {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-family: var(--font-nepali);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell-festival-tag {
+  font-size: 0.62rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  font-family: var(--font-nepali);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-indicator-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 6px var(--accent-cyan);
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+
+/* ==========================================================================
+   FEATURE TABS & LOWER SECTIONS
+   ========================================================================== */
+
+.tabs-navigation-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 0.75rem;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tab-btn.active {
+  color: var(--text-main);
+  background: var(--bg-card);
+  border-color: var(--border-glass);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tab-content-panel {
+  display: none;
+  animation: fadeIn 0.25s ease;
+}
+
+.tab-content-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Date Converter Panel */
+.converter-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .converter-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.converter-box {
+  padding: 1.5rem;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.input-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.input-field {
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-glass);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--accent-cyan);
+}
+
+.conversion-result-card {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.result-primary-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--clock-digit-color);
+}
+
+.result-secondary-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Upcoming Festivals List */
+.festivals-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.festival-item-card {
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: var(--transition-smooth);
+}
+
+.festival-item-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+.festival-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-sm);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--accent-red);
+  flex-shrink: 0;
+}
+
+.f-badge-day {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+  font-family: var(--font-nepali);
+}
+
+.f-badge-month {
+  font-size: 0.68rem;
+  font-family: var(--font-nepali);
+}
+
+.festival-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.festival-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  font-family: var(--font-nepali);
+}
+
+.festival-en-name {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.festival-tag-chip {
+  display: inline-block;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-gold);
+  width: fit-content;
+  margin-top: 0.25rem;
+}
+
+/* Stopwatch & Timer Tool */
+.stopwatch-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 800px) {
+  .stopwatch-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tool-digits {
+  font-family: var(--font-clock);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--clock-digit-color);
+  text-align: center;
+  margin: 1.5rem 0;
+  letter-spacing: 0.03em;
+}
+
+.tool-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   DAY DETAIL MODAL / DRAWER
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.day-modal-card {
+  width: 100%;
+  max-width: 580px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-glass-hover);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.active .day-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.modal-bs-date {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: var(--font-nepali);
+  color: var(--accent-gold);
+}
+
+.modal-ad-date {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.modal-panchanga-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.panchanga-item {
+  padding: 0.65rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+}
+
+.panchanga-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.panchanga-value {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-main);
+  font-family: var(--font-nepali);
+}
+
+/* User Notes in Modal */
+.notes-section {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-glass);
+}
+
+.notes-input-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  font-size: 0.88rem;
+}
+
+.btn-delete-note {
+  background: transparent;
+  border: none;
+  color: var(--accent-red);
+  cursor: pointer;
+  padding: 0.2rem;
+  opacity: 0.7;
+}
+
+.btn-delete-note:hover {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   FULLSCREEN CLOCK MODE (LIKE timeanddate.com)
+   ========================================================================== */
+
+.fullscreen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000000;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem;
+  overflow: hidden;
+}
+
+.fullscreen-overlay.active {
+  display: flex;
+}
+
+/* Fullscreen Top Bar */
+.fs-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.fs-location-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.fs-loc-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: -0.01em;
+}
+
+.fs-loc-tz {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-family: var(--font-mono);
+}
+
+.fs-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.fs-theme-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.25rem 0.4rem;
+  border-radius: 20px;
+}
+
+.theme-pill-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.theme-pill-dot:hover {
+  transform: scale(1.2);
+}
+
+.theme-pill-dot.active {
+  border-color: white;
+}
+
+.dot-amber { background: #f59e0b; }
+.dot-cyan { background: #06b6d4; }
+.dot-oled { background: #ffffff; }
+.dot-sunset { background: #e11d48; }
+.dot-matrix { background: #22c55e; }
+
+/* Giant Fullscreen Digits */
+.fs-center-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  text-align: center;
+  width: 100%;
+}
+
+.fs-giant-digits {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: var(--font-clock);
+  font-size: clamp(4.5rem, 15vw, 13rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.fs-colon {
+  font-family: var(--font-clock);
+  opacity: 0.8;
+  animation: colon-blink 1s steps(1) infinite;
+  margin: 0 0.1em;
+}
+
+.fs-seconds-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 0.2em;
+}
+
+.fs-giant-seconds {
+  font-family: var(--font-clock);
+  font-size: clamp(2rem, 6vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.fs-ampm {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 2.5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+/* Fullscreen Date & Status Ticker */
+.fs-date-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.fs-nepali-date {
+  font-size: clamp(1.2rem, 3vw, 2.2rem);
+  font-weight: 700;
+  font-family: var(--font-nepali);
+}
+
+.fs-gregorian-date {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.fs-tithi-pill {
+  font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+  font-family: var(--font-nepali);
+  padding: 0.3rem 0.9rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Fullscreen Bottom World Clock Ticker */
+.fs-bottom-ticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  overflow-x: auto;
+  padding-top: 1.5rem;
+  width: 100%;
+}
+
+.fs-ticker-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  white-space: nowrap;
+}
+
+.fs-ticker-city {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+.fs-ticker-time {
+  font-family: var(--font-clock);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Fullscreen Themes */
+/* 1. Theme Amber (Kathmandu Golden Temple) */
+.fullscreen-overlay.theme-amber {
+  background: radial-gradient(circle at center, #1c1404 0%, #050401 100%);
+}
+.fullscreen-overlay.theme-amber .fs-giant-digits {
+  color: #fbbf24;
+  text-shadow: 0 0 40px rgba(245, 158, 11, 0.6), 0 0 90px rgba(245, 158, 11, 0.3);
+}
+.fullscreen-overlay.theme-amber .fs-giant-seconds {
+  color: #f59e0b;
+}
+.fullscreen-overlay.theme-amber .fs-nepali-date {
+  color: #fbbf24;
+}
+
+/* 2. Theme Cyan (Cyberpunk Neon) */
+.fullscreen-overlay.theme-cyan {
+  background: radial-gradient(circle at center, #031e2b 0%, #020b12 100%);
+}
+.fullscreen-overlay.theme-cyan .fs-giant-digits {
+  color: #38bdf8;
+  text-shadow: 0 0 40px rgba(56, 189, 248, 0.6), 0 0 90px rgba(6, 182, 212, 0.35);
+}
+.fullscreen-overlay.theme-cyan .fs-giant-seconds {
+  color: #06b6d4;
+}
+.fullscreen-overlay.theme-cyan .fs-nepali-date {
+  color: #38bdf8;
+}
+
+/* 3. Theme OLED (Minimalist Pure Black & White) */
+.fullscreen-overlay.theme-oled {
+  background: #000000;
+}
+.fullscreen-overlay.theme-oled .fs-giant-digits {
+  color: #ffffff;
+  text-shadow: none;
+}
+.fullscreen-overlay.theme-oled .fs-giant-seconds {
+  color: #94a3b8;
+}
+.fullscreen-overlay.theme-oled .fs-nepali-date {
+  color: #ffffff;
+}
+
+/* 4. Theme Sunset (Himalayan Twilight) */
+.fullscreen-overlay.theme-sunset {
+  background: radial-gradient(circle at center, #2e0821 0%, #0c0209 100%);
+}
+.fullscreen-overlay.theme-sunset .fs-giant-digits {
+  color: #fb7185;
+  text-shadow: 0 0 45px rgba(251, 113, 133, 0.6), 0 0 95px rgba(225, 29, 72, 0.3);
+}
+.fullscreen-overlay.theme-sunset .fs-giant-seconds {
+  color: #f43f5e;
+}
+.fullscreen-overlay.theme-sunset .fs-nepali-date {
+  color: #fb7185;
+}
+
+/* 5. Theme Matrix (Classic Retro Segment LED) */
+.fullscreen-overlay.theme-matrix {
+  background: #020d04;
+}
+.fullscreen-overlay.theme-matrix .fs-giant-digits {
+  color: #4ade80;
+  text-shadow: 0 0 35px rgba(74, 222, 128, 0.6);
+}
+.fullscreen-overlay.theme-matrix .fs-giant-seconds {
+  color: #22c55e;
+}
+.fullscreen-overlay.theme-matrix .fs-nepali-date {
+  color: #4ade80;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .top-nav {
+    padding: 0.6rem 1rem;
+  }
+  .app-main {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .calendar-day-cell {
+    min-height: 72px;
+    padding: 0.35rem;
+  }
+  .bs-day-number {
+    font-size: 1.15rem;
+  }
+  .digit-block {
+    font-size: 2.5rem;
+  }
+}

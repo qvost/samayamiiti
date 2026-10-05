@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeroPatro • Digital Clock & Nepali Calendar</title>
+  <meta name="description" content="A premium Digital Clock and Nepali Calendar (Mero Patro) with Kathmandu World Clock, Bikram Sambat dates, Panchanga, and Fullscreen display." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Mukta:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <div class="brand-wrapper">
+        <div class="brand-icon-box">
+          <!-- Nepali Temple/Pagoda & Sun SVG -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <polygon points="12 2 19 8 5 8 12 2" fill="currentColor" fill-opacity="0.3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            <span class="devanagari">नेपाल पात्रो</span>
+            <span>MeroPatro</span>
+          </div>
+          <div class="brand-subtitle">
+            <span class="live-indicator-dot"></span>
+            <span>Kathmandu, Nepal • UTC +5:45</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Chime Sound Toggle -->
+        <button id="btnSoundToggle" class="btn" title="Toggle Hourly Singing Bowl Chime" aria-label="Toggle Hourly Chime">
+          <span id="soundIcon">🔔</span>
+          <span id="soundLabel">Chime: On</span>
+        </button>
+
+        <!-- Numeral System Toggle (नेपाली ⇄ English) -->
+        <button id="btnNumeralsToggle" class="btn" title="Toggle Nepali / English Numerals" aria-label="Toggle Numerals">
+          <span id="numeralToggleLabel">अंक: १२३</span>
+        </button>
+
+        <!-- Light/Dark Theme Switcher -->
+        <button id="btnThemeToggle" class="btn btn-icon" title="Toggle Theme" aria-label="Toggle Theme">
+          <span id="themeIcon">🌓</span>
+        </button>
+
+        <!-- Fullscreen Clock Mode (like timeanddate.com) -->
+        <button id="btnFullscreenOpen" class="btn btn-fullscreen" title="Open Fullscreen Clock" aria-label="Open Fullscreen Clock">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+          <span>Fullscreen</span>
+          <span class="kbd-badge">F</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="app-main">
+
+    <!-- Top Split Grid: Digital Clock Observatory (Left) + Mero Patro Monthly Calendar (Right) -->
+    <section class="hero-split-grid">
+
+      <!-- LEFT COLUMN: Digital Clock & Kathmandu Observatory -->
+      <div class="clock-observatory-col">
+
+        <!-- 1. The Hero Digital Clock Card -->
+        <div class="glass-card digital-clock-card">
+          <div class="clock-card-header">
+            <div class="tz-pill">
+              <span class="live-indicator-dot"></span>
+              <span id="clockTzLabel">Nepal Time (NPT) • UTC +5:45</span>
+            </div>
+            <div class="clock-mode-toggles">
+              <button id="btnTimeModeToggle" class="pill-toggle-btn active" title="Switch between Kathmandu time and your local system time">NPT</button>
+              <button id="btnFormatToggle" class="pill-toggle-btn" title="Toggle 12h / 24h format">12H</button>
+              <button id="btnTickSoundToggle" class="pill-toggle-btn" title="Toggle clock ticking sound">Tick</button>
+            </div>
+          </div>
+
+          <!-- Digital Clock Digits Display -->
+          <div class="digits-container">
+            <span id="clockHours" class="digit-block">00</span>
+            <span class="colon-separator">:</span>
+            <span id="clockMinutes" class="digit-block">00</span>
+            <span class="colon-separator">:</span>
+            <div class="seconds-wrapper">
+              <span id="clockSeconds" class="digit-seconds">00</span>
+              <span id="clockAmPm" class="digit-ampm">AM</span>
+            </div>
+          </div>
+
+          <!-- Smooth Linear Second Progress Bar (0 to 60s) -->
+          <div class="second-progress-bar-container">
+            <div id="clockSecondBar" class="second-progress-bar"></div>
+          </div>
+
+          <!-- Dual Calendar Date Display -->
+          <div class="dates-display-box">
+            <div class="nepali-date-row">
+              <span id="clockNepaliDate" class="nepali-date-text">-- असोज २०८३, शुक्रबार</span>
+              <span id="clockTithiTag" class="nepali-tithi-tag">शुक्ल पक्ष चतुर्दशी</span>
+            </div>
+            <div class="gregorian-date-row">
+              <span id="clockGregorianDate" class="gregorian-date-text">Friday, September 25, 2026</span>
+              <span id="clockNakshatra" class="nakshatra-text">उत्तराभाद्रपदा</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Kathmandu Solar & Astronomical Observatory Card -->
+        <div class="glass-card solar-card">
+          <div class="card-title-row">
+            <div class="card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              <span>Kathmandu Sun & Daylight</span>
+            </div>
+            <span id="solarCountdownBadge" class="badge-tag">Sunset in --</span>
+          </div>
+
+          <!-- Daylight Arc Graphic -->
+          <div class="sun-arc-wrapper">
+            <svg class="sun-arc-svg" viewBox="0 0 300 80">
+              <path d="M 20 70 A 130 60 0 0 1 280 70" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="3" stroke-dasharray="4,4"/>
+              <path id="sunArcProgress" d="M 20 70 A 130 60 0 0 1 280 70" fill="none" stroke="url(#sunArcGradient)" stroke-width="4"/>
+              <circle id="sunPositionIndicator" cx="150" cy="20" r="7" fill="#f59e0b" filter="drop-shadow(0 0 6px #f59e0b)"/>
+              <defs>
+                <linearGradient id="sunArcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#f59e0b" />
+                  <stop offset="50%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#ef4444" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Solar Stats Grid -->
+          <div class="sun-arc-stats-grid">
+            <div class="sun-stat-item">
+              <span class="sun-stat-label">🌅 Sunrise</span>
+              <span id="statSunrise" class="sun-stat-value">--:-- AM</span>
+            </div>
+            <div class="sun-stat-item">
+              <span class="sun-stat-label">🌇 Sunset</span>
+              <span id="statSunset" class="sun-stat-value">--:-- PM</span>
+            </div>
+            <div class="sun-stat-item">
+              <span class="sun-stat-label">⏱️ Day Length</span>
+              <span id="statDayLength" class="sun-stat-value">--h --m</span>
+            </div>
+            <div class="sun-stat-item">
+              <span class="sun-stat-label">☀️ Solar Noon</span>
+              <span id="statSolarNoon" class="sun-stat-value">--:--</span>
+            </div>
+            <div class="sun-stat-item">
+              <span class="sun-stat-label">🌄 Dawn (Twilight)</span>
+              <span id="statDawn" class="sun-stat-value">--:--</span>
+            </div>
+            <div class="sun-stat-item">
+              <span class="sun-stat-label">🌆 Dusk</span>
+              <span id="statDusk" class="sun-stat-value">--:--</span>
+            </div>
+          </div>
+
+          <!-- Lunar Phase Row -->
+          <div class="moon-phase-row">
+            <div class="moon-visual-box" id="moonVisualBox">
+              <svg width="34" height="34" viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15" fill="#1e293b"/>
+                <path id="moonLitPath" d="M 18 3 A 15 15 0 0 1 18 33 A 14 15 0 0 0 18 3" fill="#f8fafc"/>
+              </svg>
+            </div>
+            <div class="moon-details">
+              <span id="moonPhaseName" class="moon-phase-name">Waxing Gibbous</span>
+              <span id="moonPhaseNepali" class="moon-phase-nepali">शुक्ल चतुर्दशी</span>
+              <span id="moonIllumination" class="moon-illumination">97% Illumination • Age: 13.0 days</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Mini World Clock Snippet (Quick comparison) -->
+        <div class="glass-card">
+          <div class="card-title-row">
+            <div class="card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <span>World Clocks (vs Kathmandu)</span>
+            </div>
+            <button id="btnOpenWorldTab" class="btn btn-icon" style="height: 28px; width: 28px; font-size: 0.75rem;" title="View all world clocks">→</button>
+          </div>
+
+          <div id="miniWorldClocksContainer" class="world-clocks-preview-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Mero Patro Monthly Bikram Sambat Calendar -->
+      <div class="calendar-col">
+        <div class="glass-card patro-calendar-card">
+
+          <!-- Calendar Header Controls -->
+          <div class="calendar-top-bar">
+            <div class="month-year-title-group">
+              <div class="bs-month-title">
+                <span id="calBsMonthYear" class="nepali-text">असोज २०८३</span>
+                <span id="calBsMonthEn" style="font-size: 1.1rem; color: var(--text-muted); font-weight: 500;">(Ashwin 2083)</span>
+              </div>
+              <div class="gregorian-range-subtitle">
+                <span id="calGregorianRange">Sep / Oct 2026</span>
+                <span id="calSeasonBadge" class="season-badge">शरद ऋतु</span>
+              </div>
+            </div>
+
+            <!-- Month navigation buttons and Jump Dropdowns -->
+            <div class="cal-nav-buttons">
+              <button id="btnPrevMonth" class="btn btn-icon" title="Previous Month" aria-label="Previous Month">‹</button>
+              <button id="btnCurrentMonth" class="btn" title="Jump to Today">आज (Today)</button>
+              <button id="btnNextMonth" class="btn btn-icon" title="Next Month" aria-label="Next Month">›</button>
+
+              <!-- Year Select -->
+              <select id="selectBsYear" class="select-dropdown" aria-label="Select Year"></select>
+
+              <!-- Month Select -->
+              <select id="selectBsMonth" class="select-dropdown" aria-label="Select Month"></select>
+            </div>
+          </div>
+
+          <!-- Calendar Grid Wrapper -->
+          <div class="calendar-grid-wrapper">
+            <!-- Weekday Headers (आइत to शनि) -->
+            <div class="calendar-weekdays-header">
+              <div class="weekday-header-cell">आइत (Sun)</div>
+              <div class="weekday-header-cell">सोम (Mon)</div>
+              <div class="weekday-header-cell">मङ्गल (Tue)</div>
+              <div class="weekday-header-cell">बुध (Wed)</div>
+              <div class="weekday-header-cell">बिही (Thu)</div>
+              <div class="weekday-header-cell">शुक्र (Fri)</div>
+              <div class="weekday-header-cell saturday">शनि (Sat)</div>
+            </div>
+
+            <!-- Calendar Days Matrix -->
+            <div id="calendarDaysMatrix" class="calendar-days-matrix">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Lower Section: Feature Tabs (Festivals, Date Converter, World Observatory, Desk Tools) -->
+    <section class="glass-card" style="padding: 1.5rem;">
+      <nav class="tabs-navigation-bar">
+        <button class="tab-btn active" data-tab="festivalsTab">🚩 महिनाका चाडपर्वहरू (Festivals & Holidays)</button>
+        <button class="tab-btn" data-tab="converterTab">🔄 AD ⇄ BS Date Converter</button>
+        <button class="tab-btn" data-tab="worldClockTab">🌐 World Clock Observatory</button>
+        <button class="tab-btn" data-tab="toolsTab">⏱️ Stopwatch & Focus Timer</button>
+      </nav>
+
+      <!-- TAB 1: Festivals & Holidays of Current Month -->
+      <div id="festivalsTab" class="tab-content-panel active" style="margin-top: 1.25rem;">
+        <div id="festivalsListContainer" class="festivals-list-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- TAB 2: AD ⇄ BS Date Converter -->
+      <div id="converterTab" class="tab-content-panel" style="margin-top: 1.25rem;">
+        <div class="converter-container">
+          <!-- BS to AD -->
+          <div class="glass-card converter-box">
+            <h3 style="font-size: 1.1rem; color: var(--accent-gold); margin-bottom: 0.5rem;">Bikram Sambat (BS) ➔ Gregorian (AD)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">नेपाली मितिबाट अंग्रेजी मिति रूपान्तरण</p>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" for="inputBsYear">BS Year</label>
+                <input type="number" id="inputBsYear" class="input-field" value="2083" min="2000" max="2090" />
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="selectConvBsMonth">BS Month</label>
+                <select id="selectConvBsMonth" class="input-field"></select>
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="inputBsDay">BS Day</label>
+                <input type="number" id="inputBsDay" class="input-field" value="9" min="1" max="32" />
+              </div>
+            </div>
+            <button id="btnConvertBsToAd" class="btn btn-primary" style="width: 100%;">Convert to AD</button>
+            <div id="resultBsToAd" class="conversion-result-card" style="display: none;"></div>
+          </div>
+
+          <!-- AD to BS -->
+          <div class="glass-card converter-box">
+            <h3 style="font-size: 1.1rem; color: var(--accent-cyan); margin-bottom: 0.5rem;">Gregorian (AD) ➔ Bikram Sambat (BS)</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">अंग्रेजी मितिबाट नेपाली मिति रूपान्तरण</p>
+            <div class="input-row">
+              <div class="input-group">
+                <label class="input-label" for="inputAdYear">AD Year</label>
+                <input type="number" id="inputAdYear" class="input-field" value="2026" min="1943" max="2034" />
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="selectConvAdMonth">AD Month</label>
+                <select id="selectConvAdMonth" class="input-field">
+                  <option value="1">Jan (1)</option>
+                  <option value="2">Feb (2)</option>
+                  <option value="3">Mar (3)</option>
+                  <option value="4">Apr (4)</option>
+                  <option value="5">May (5)</option>
+                  <option value="6">Jun (6)</option>
+                  <option value="7">Jul (7)</option>
+                  <option value="8">Aug (8)</option>
+                  <option value="9" selected>Sep (9)</option>
+                  <option value="10">Oct (10)</option>
+                  <option value="11">Nov (11)</option>
+                  <option value="12">Dec (12)</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="inputAdDay">AD Day</label>
+                <input type="number" id="inputAdDay" class="input-field" value="25" min="1" max="31" />
+              </div>
+            </div>
+            <button id="btnConvertAdToBs" class="btn btn-primary" style="width: 100%;">Convert to BS</button>
+            <div id="resultAdToBs" class="conversion-result-card" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: World Clock Full Observatory -->
+      <div id="worldClockTab" class="tab-content-panel" style="margin-top: 1.25rem;">
+        <div id="expandedWorldClocksGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- TAB 4: Stopwatch & Focus Timer -->
+      <div id="toolsTab" class="tab-content-panel" style="margin-top: 1.25rem;">
+        <div class="stopwatch-container">
+          <!-- Stopwatch -->
+          <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+            <h3 style="font-size: 1.1rem; color: var(--text-main);">⏱️ Digital Stopwatch</h3>
+            <div id="stopwatchDisplay" class="tool-digits">00:00.00</div>
+            <div class="tool-controls-row">
+              <button id="btnSwStart" class="btn btn-primary">Start</button>
+              <button id="btnSwLap" class="btn">Lap</button>
+              <button id="btnSwReset" class="btn">Reset</button>
+            </div>
+            <div id="stopwatchLapsList" style="max-height: 140px; overflow-y: auto; margin-top: 1rem; font-size: 0.82rem; color: var(--text-muted);"></div>
+          </div>
+
+          <!-- Focus Timer -->
+          <div class="glass-card" style="padding: 1.5rem; text-align: center;">
+            <h3 style="font-size: 1.1rem; color: var(--text-main);">⏳ Countdown Timer</h3>
+            <div id="timerDisplay" class="tool-digits">25:00</div>
+            <div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+              <button class="btn btn-preset-timer" data-minutes="5">5m</button>
+              <button class="btn btn-preset-timer" data-minutes="15">15m</button>
+              <button class="btn btn-preset-timer" data-minutes="25">25m (Pomodoro)</button>
+              <button class="btn btn-preset-timer" data-minutes="45">45m</button>
+            </div>
+            <div class="tool-controls-row">
+              <button id="btnTimerStart" class="btn btn-primary">Start</button>
+              <button id="btnTimerPause" class="btn">Pause</button>
+              <button id="btnTimerReset" class="btn">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Interactive Day Details & Notes Modal / Drawer -->
+  <div id="dayDetailModal" class="modal-overlay">
+    <div class="day-modal-card">
+      <div class="modal-header-row">
+        <div>
+          <div id="modalBsDate" class="modal-bs-date">-- असोज २०८३</div>
+          <div id="modalAdDate" class="modal-ad-date">-- September 2026, Friday</div>
+        </div>
+        <button id="btnCloseDayModal" class="btn btn-icon" aria-label="Close Modal">✕</button>
+      </div>
+
+      <!-- Panchanga Details -->
+      <div class="modal-panchanga-grid">
+        <div class="panchanga-item">
+          <span class="panchanga-label">तिथी (Tithi)</span>
+          <div id="modalTithi" class="panchanga-value">--</div>
+        </div>
+        <div class="panchanga-item">
+          <span class="panchanga-label">पक्ष (Paksha)</span>
+          <div id="modalPaksha" class="panchanga-value">--</div>
+        </div>
+        <div class="panchanga-item">
+          <span class="panchanga-label">नक्षत्र (Nakshatra)</span>
+          <div id="modalNakshatra" class="panchanga-value">--</div>
+        </div>
+        <div class="panchanga-item">
+          <span class="panchanga-label">सूर्योदय / सूर्यास्त (KTM)</span>
+          <div id="modalSunTimes" class="panchanga-value">--</div>
+        </div>
+      </div>
+
+      <!-- Festivals on this day -->
+      <div id="modalFestivalsContainer" style="margin-top: 1rem;"></div>
+
+      <!-- Notes & Reminders for this Day -->
+      <div class="notes-section">
+        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main);">📝 Reminders & Personal Notes</h4>
+        <div class="notes-input-row">
+          <input type="text" id="inputModalNote" class="input-field" placeholder="Add note / reminder for this date..." style="flex: 1;" />
+          <button id="btnAddModalNote" class="btn btn-primary">Add Note</button>
+        </div>
+        <div id="modalNotesList" class="notes-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN DIGITAL CLOCK DISPLAY (Like timeanddate.com) -->
+  <div id="fullscreenClockOverlay" class="fullscreen-overlay theme-amber">
+    <!-- Fullscreen Top Bar -->
+    <div class="fs-top-bar">
+      <div class="fs-location-info">
+        <span style="font-size: 1.5rem;">🇳🇵</span>
+        <div>
+          <div class="fs-loc-title">Kathmandu, Nepal</div>
+          <div class="fs-loc-tz">Nepal Standard Time • UTC +5:45</div>
+        </div>
+      </div>
+
+      <div class="fs-controls-group">
+        <!-- Fullscreen Theme Palette Selector -->
+        <div class="fs-theme-selector" title="Change Theme Style">
+          <div class="theme-pill-dot dot-amber active" data-theme="theme-amber" title="Golden Temple (Amber Glow)"></div>
+          <div class="theme-pill-dot dot-cyan" data-theme="theme-cyan" title="Cyber Neon (Cyan)"></div>
+          <div class="theme-pill-dot dot-oled" data-theme="theme-oled" title="OLED Pure Minimalist"></div>
+          <div class="theme-pill-dot dot-sunset" data-theme="theme-sunset" title="Himalayan Sunset"></div>
+          <div class="theme-pill-dot dot-matrix" data-theme="theme-matrix" title="Matrix 7-Segment Green"></div>
+        </div>
+
+        <!-- 12h/24h toggle -->
+        <button id="btnFsFormatToggle" class="btn" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);">12H</button>
+
+        <!-- Exit Fullscreen Button -->
+        <button id="btnFullscreenClose" class="btn" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">
+          <span>✕ Exit</span>
+          <span class="kbd-badge">ESC</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Giant Center Clock Display -->
+    <div class="fs-center-clock">
+      <div class="fs-giant-digits">
+        <span id="fsHours">00</span>
+        <span class="fs-colon">:</span>
+        <span id="fsMinutes">00</span>
+        <div class="fs-seconds-box">
+          <span id="fsSeconds" class="fs-giant-seconds">00</span>
+          <span id="fsAmPm" class="fs-ampm">AM</span>
+        </div>
+      </div>
+
+      <!-- Fullscreen Date Ribbon -->
+      <div class="fs-date-ribbon">
+        <div id="fsNepaliDate" class="fs-nepali-date">२०८३ असोज ९, शुक्रबार</div>
+        <div id="fsGregorianDate" class="fs-gregorian-date">Friday, September 25, 2026</div>
+        <div id="fsTithi" class="fs-tithi-pill">शुक्ल पक्ष चतुर्दशी</div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Bottom World Clocks Ticker -->
+    <div id="fsBottomTicker" class="fs-bottom-ticker">
+      <!-- Injected dynamically -->
+    </div>
+  </div>
+
+  <!-- Main JavaScript App Entrypoint -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
