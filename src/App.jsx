@@ -100,6 +100,19 @@ export default function App() {
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1600px] flex-col px-6 sm:px-10">
           <header className="glass-header sticky top-0 z-40 -mx-6 flex items-center justify-between bg-black/60 px-6 py-5 text-[13px] sm:-mx-10 sm:px-10">
             <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setTab('clock')}
+                className="group flex cursor-pointer items-center transition-transform hover:scale-105 active:scale-95"
+                title="Samayamiiti"
+                aria-label="Home"
+              >
+                <img
+                  src="/favicon.svg"
+                  alt="Samayamiiti"
+                  className="size-7 rounded-[9px] border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.5)] transition-opacity group-hover:opacity-90"
+                />
+              </button>
               <Settings clock={clock} nepali={nepali} onNepali={toggleNepali} />
             </div>
             <nav className="flex items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.03] p-1 backdrop-blur-xl">
