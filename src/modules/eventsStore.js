@@ -49,7 +49,7 @@ export class EventsStore {
       tag,
       createdAt: new Date().toISOString()
     };
-    this.events.push(newEvent);
+    this.events = [...this.events, newEvent];
     this.save();
     return newEvent;
   }

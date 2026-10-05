@@ -1,0 +1,192 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+
+@theme {
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, 'Noto Sans Devanagari', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --color-background: #000000;
+  --color-foreground: #ededed;
+  --color-muted: #8a8a8a;
+  --color-faint: #5c5c5c;
+  --color-line: #1c1c1c;
+  --color-accent: #f4b400;
+  --color-danger: #e8402a;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #000;
+}
+
+@layer base {
+  input,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  select {
+    appearance: none;
+    background: transparent;
+  }
+
+  select option {
+    background: #111;
+  }
+}
+
+/* hairline list that dims siblings on hover */
+.dim-list:hover > * {
+  opacity: 0.45;
+}
+.dim-list > *:hover {
+  opacity: 1;
+}
+.dim-list > * {
+  transition: opacity 0.2s ease;
+}
+
+/* subtle film grain */
+.grain::after {
+  content: '';
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* sunrise → sunset arc */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---- Apple-like motion language ---- */
+:root {
+  --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* tab content entrance: soft rise + de-blur */
+@keyframes rise-blur {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+.tab-enter {
+  animation: rise-blur 0.55s var(--ease-apple) both;
+  will-change: transform, opacity, filter;
+}
+
+/* nav + buttons: snappy Apple press feedback */
+.pressable {
+  transition:
+    transform 0.25s var(--ease-apple),
+    background-color 0.25s var(--ease-apple),
+    color 0.25s var(--ease-apple),
+    opacity 0.25s var(--ease-apple);
+}
+.pressable:active {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-enter {
+    animation: none;
+  }
+}
+
+/* hairline rows glide a touch on hover */
+.dim-list > * {
+  transition:
+    opacity 0.3s var(--ease-apple),
+    transform 0.3s var(--ease-apple),
+    background-color 0.3s var(--ease-apple);
+}
+
+/* calendar cells: gentle lift + press */
+.cell-anim {
+  transition:
+    transform 0.3s var(--ease-apple),
+    background-color 0.3s var(--ease-apple),
+    opacity 0.3s var(--ease-apple);
+}
+.cell-anim:hover {
+  transform: translateY(-1px);
+}
+.cell-anim:active {
+  transform: scale(0.97);
+}
+
+/* sticky glass header like Apple nav */
+.glass-header {
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+}
+
+/* thin dark scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 2px solid #000;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* accessible focus ring */
+:focus-visible {
+  outline: 2px solid rgba(244, 180, 0, 0.7);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
